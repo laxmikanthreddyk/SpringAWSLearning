@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Implementation-Title: SpringAWSLearning
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: laxmikanth
+Implementation-Vendor-Id: com.mycom
+Build-Jdk: 1.8.0_141
+Implementation-URL: http://projects.spring.io/spring-boot/SpringAWSLea
+ rning/
+Created-By: Maven Integration for Eclipse
+Implementation-Vendor: Pivotal Software, Inc.
+
