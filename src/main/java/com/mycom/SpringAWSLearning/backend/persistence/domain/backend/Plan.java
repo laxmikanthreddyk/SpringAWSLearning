@@ -15,6 +15,7 @@ public class Plan implements Serializable {
 		
 	}
 	
+	
 	@Id
 	private int id;
 	

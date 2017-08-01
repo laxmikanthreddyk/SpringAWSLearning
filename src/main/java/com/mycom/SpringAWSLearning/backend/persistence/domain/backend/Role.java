@@ -13,10 +13,6 @@ import javax.persistence.OneToMany;
 @Entity	
 public class Role implements Serializable {
 	
-	public Role()
-	{
-		
-	}
 	
 	private static final long serialVersionUID = 1L;
 	

@@ -14,7 +14,7 @@ import junit.framework.Assert;
 
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
-@SpringBootTest
+@SpringBootTest(classes=SpringAwsLearningApplication.class)
 public class SpringAwsLearningApplicationTests 
 {
 	

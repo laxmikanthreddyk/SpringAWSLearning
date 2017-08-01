@@ -19,11 +19,7 @@ import org.hibernate.validator.constraints.Length;
 
 @Entity	
 public class User implements Serializable {
-	
- public User()
- {
-	 
- }
+
 
  private static final long serialVersionUID = 1L;
  
