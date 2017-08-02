@@ -21,6 +21,8 @@ import com.mycom.SpringAWSLearning.backend.persistence.domain.backend.UserRole;
 import com.mycom.SpringAWSLearning.backend.persistence.repositories.PlanRepository;
 import com.mycom.SpringAWSLearning.backend.persistence.repositories.RoleRepository;
 import com.mycom.SpringAWSLearning.backend.persistence.repositories.UserRepository;
+import com.mycom.SpringAWSLearning.enums.PlansEnum;
+import com.mycom.SpringAWSLearning.enums.RolesEnum;
 
 import junit.framework.Assert;
 
@@ -38,8 +40,6 @@ public class RepositoriesIntegrationTest {
 	@Autowired
 	private PlanRepository planRepository;
 	
-	private static final int BASIC_PLAN_ID = 1;
-	private static final int BASIC_ROLE_ID = 1;
 	private static final int BASIC_USER_ID = 1;
 	
 	@Before
@@ -53,34 +53,30 @@ public class RepositoriesIntegrationTest {
 	@Test
 	public void testCreateNewPlan() throws Exception
 	{
-		Plan basicPlan = CreateBasicPlan();
+		Plan basicPlan = CreatePlan(PlansEnum.BASIC);
 		planRepository.save(basicPlan);
-		Plan retrievedPlan = planRepository.findOne(BASIC_PLAN_ID);
+		Plan retrievedPlan = planRepository.findOne(PlansEnum.BASIC.getId());
 		Assert.assertNotNull(retrievedPlan);
 	}
 
-	private Plan CreateBasicPlan() {
-		Plan plan = new Plan();
-		plan.setId(BASIC_PLAN_ID);
-		plan.setName("Basic");
-		return plan;
+	private Plan CreatePlan(PlansEnum plansEnum) {
+		return new Plan(plansEnum);
 	}
 	
+
 	@Test
 	public void testCreateNewRole() throws Exception
 	{
-		Role basicrole = CreateBasicRole();
+		Role basicrole = CreateRole(RolesEnum.BASIC);
 		roleRepository.save(basicrole);
-		Role retrievedRole = roleRepository.findOne(BASIC_ROLE_ID);
+		Role retrievedRole = roleRepository.findOne(RolesEnum.BASIC.getId());
 		Assert.assertNotNull(retrievedRole);
 	}
 
-	private Role CreateBasicRole() {
-		Role role = new Role();
-		role.setId(BASIC_ROLE_ID);
-		role.setName("ROLE_USER");
-		return role;
+	private Role CreateRole(RolesEnum rolesEnum) {
+		return new Role(rolesEnum);
 	}
+	
 	
 	private User CreateBasicUser()
 	{
@@ -102,17 +98,16 @@ public class RepositoriesIntegrationTest {
 	@Test
 	public void CreateUserTest() throws Exception
 	{
-		Plan basicPlan = CreateBasicPlan();
+		Plan basicPlan = CreatePlan(PlansEnum.BASIC);
 		planRepository.save(basicPlan);
 		
 		User basicUser = CreateBasicUser();
 		basicUser.setPlan(basicPlan);
 		
-		Role basicRole = CreateBasicRole();
+		Role basicRole = CreateRole(RolesEnum.BASIC);
 		Set<UserRole> userRoles = new HashSet<>();
-		UserRole userRole = new UserRole();
-		userRole.setUser(basicUser);
-		userRole.setRole(basicRole);
+		UserRole userRole = new UserRole(basicUser,basicRole);
+	
 		
 		userRoles.add(userRole);
 		

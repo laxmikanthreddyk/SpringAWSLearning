@@ -10,6 +10,8 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.mycom.SpringAWSLearning.enums.RolesEnum;
+
 @Entity	
 public class Role implements Serializable {
 	
@@ -21,9 +23,20 @@ public class Role implements Serializable {
 	
 	private String name;
 	
+	public Role()
+	{
+		
+	}
+	
 	@OneToMany(mappedBy="role", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	 private Set<UserRole> userRoles = new HashSet<>();
 	
+	
+	public Role(RolesEnum rolesEnum) {
+		// TODO Auto-generated constructor stub
+		this.id = rolesEnum.getId();
+		this.name = rolesEnum.getRoleName();
+	}
 
 	public Set<UserRole> getUserRoles() {
 		return userRoles;
