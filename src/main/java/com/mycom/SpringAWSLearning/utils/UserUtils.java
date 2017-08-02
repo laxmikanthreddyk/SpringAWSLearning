@@ -10,12 +10,12 @@ public class UserUtils {
 		
 	}
 
-	public static User CreateBasicUser()
+	public static User CreateBasicUser(String username, String email)
 	{
 		User user = new User();
-		user.setUsername("laxmikanth");
+		user.setUsername(username);
 		user.setCountry("US");
-		user.setEmail("laxmikanthcode@gmail.com");
+		user.setEmail(email);
 		user.setEnabled(true);
 		user.setFirstName("Laxmikanth");
 		user.setLastName("Koduru");

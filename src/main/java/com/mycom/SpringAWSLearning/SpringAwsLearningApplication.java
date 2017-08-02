@@ -20,6 +20,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 
 @SpringBootApplication
@@ -27,6 +28,14 @@ public class SpringAwsLearningApplication implements CommandLineRunner  {
 
 	private static final Logger LOG = LoggerFactory.getLogger(SMTPSendEmailService.class);
 	
+	@Value("${webmaster.username}")
+	private String webmasterUsername;
+	
+	@Value("${webmaster.password}")
+	private String webmasterPassword;
+	
+	@Value("${webmaster.email}")
+	private String webmasterEmail;
 	
 	@Autowired
 	private UserService userService;
@@ -34,11 +43,15 @@ public class SpringAwsLearningApplication implements CommandLineRunner  {
 	public static void main(String[] args) {
 		SpringApplication.run(SpringAwsLearningApplication.class, args);
 	}
+	
+	
 
 	@Override
 	public void run(String... args) throws Exception {
+		
 		Set<UserRole> userRoles = new HashSet<>();
-		User basicUser = UserUtils.CreateBasicUser(); 
+		User basicUser = UserUtils.CreateBasicUser(webmasterUsername, webmasterEmail); 
+		basicUser.setPassword(webmasterPassword);
 		LOG.debug("Creating User with username {}",basicUser.getUsername());
 		userRoles.add(new UserRole(basicUser, new Role(RolesEnum.BASIC)));
 		

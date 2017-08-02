@@ -4,7 +4,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
@@ -23,24 +25,17 @@ import com.mycom.SpringAWSLearning.backend.persistence.repositories.RoleReposito
 import com.mycom.SpringAWSLearning.backend.persistence.repositories.UserRepository;
 import com.mycom.SpringAWSLearning.enums.PlansEnum;
 import com.mycom.SpringAWSLearning.enums.RolesEnum;
+import com.mycom.SpringAWSLearning.utils.UserUtils;
 
 import junit.framework.Assert;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootConfiguration
 @SpringBootTest(classes=SpringAwsLearningApplication.class)
-public class RepositoriesIntegrationTest {
+public class UserIntegrationTest extends AbstractIntegrationTest {
 	
-	@Autowired
-	private UserRepository userRepository;
 	
-	@Autowired
-	private RoleRepository roleRepository;
-	
-	@Autowired
-	private PlanRepository planRepository;
-	
-	private static final int BASIC_USER_ID = 1;
+	@Rule public TestName testName = new TestName();
 	
 	@Before
 	public void init()
@@ -59,9 +54,7 @@ public class RepositoriesIntegrationTest {
 		Assert.assertNotNull(retrievedPlan);
 	}
 
-	private Plan CreatePlan(PlansEnum plansEnum) {
-		return new Plan(plansEnum);
-	}
+	
 	
 
 	@Test
@@ -73,32 +66,17 @@ public class RepositoriesIntegrationTest {
 		Assert.assertNotNull(retrievedRole);
 	}
 
-	private Role CreateRole(RolesEnum rolesEnum) {
-		return new Role(rolesEnum);
-	}
 	
 	
-	private User CreateBasicUser()
-	{
-		User user = new User();
-		user.setUsername("laxmikanth");
-		user.setCountry("US");
-		user.setEmail("laxmikanthcode@gmail.com");
-		user.setEnabled(true);
-		user.setFirstName("Laxmikanth");
-		user.setLastName("Koduru");
-		user.setPhoneNumber("5516895560");
-		user.setDescription("First User Account");
-		user.setPassword("secret");
-		user.setProfileImageUrl("http://test.com");
-		
-		return user;
-	}
+
 	
 	@Test
 	public void CreateUserTest() throws Exception
 	{
-		User basicUser = CreateUser();
+		String username = testName.getMethodName();
+		String email = testName.getMethodName()+"@gmail.com";
+		
+		User basicUser = CreateUser(username, email);
 		
 		User newCreatedUser = userRepository.findOne(basicUser.getId());
 		Assert.assertNotNull(newCreatedUser);
@@ -114,33 +92,14 @@ public class RepositoriesIntegrationTest {
 		
 	}
 	
-	public User CreateUser()
-	{
-		
-		Plan basicPlan = CreatePlan(PlansEnum.BASIC);
-		planRepository.save(basicPlan);
-		
-		User basicUser = CreateBasicUser();
-		basicUser.setPlan(basicPlan);
-		
-		Role basicRole = CreateRole(RolesEnum.BASIC);
-		Set<UserRole> userRoles = new HashSet<>();
-		UserRole userRole = new UserRole(basicUser,basicRole);
 	
-		
-		userRoles.add(userRole);
-		
-		basicUser.getUserRoles().addAll(userRoles);
-		
-		
-		userRepository.save(basicUser);
-		return basicUser;
-	}
 	
 	@Test
 	public void DeleteUserTest() throws Exception
 	{
-		User basicUser = CreateUser();
+		String username = testName.getMethodName();
+		String email = testName.getMethodName()+"@gmail.com";
+		User basicUser = CreateUser(username, email);
 		userRepository.delete(basicUser.getId());
 	}
 

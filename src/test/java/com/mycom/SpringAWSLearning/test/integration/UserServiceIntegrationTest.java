@@ -3,7 +3,9 @@ package com.mycom.SpringAWSLearning.test.integration;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
@@ -30,11 +32,15 @@ public class UserServiceIntegrationTest {
 	@Autowired
 	private UserService userService;
 	
+	@Rule public TestName testName = new TestName();
+	
 	@Test
 	public void testCreateUser() throws Exception
 	{
+		String username = testName.getMethodName();
+		String email = testName.getMethodName()+"@gmail.com";
 		Set<UserRole> userRoles = new HashSet<>();
-		User basicUser = UserUtils.CreateBasicUser(); 
+		User basicUser = UserUtils.CreateBasicUser(username, email); 
 		userRoles.add(new UserRole(basicUser, new Role(RolesEnum.BASIC)));
 		
 		User user = userService.CreateUser(basicUser, PlansEnum.BASIC, userRoles);
