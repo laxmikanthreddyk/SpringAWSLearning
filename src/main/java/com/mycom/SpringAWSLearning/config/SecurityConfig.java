@@ -11,12 +11,18 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+
+import com.mycom.SpringAWSLearning.backend.service.UserSecurityService;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
 	private Environment env;
+	
+	@Autowired
+	private UserSecurityService userSecurityService;
 	
 	private static final String[] PUBLIC_MATCHERS =
 		{
@@ -54,7 +60,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception
 	{
-		auth.inMemoryAuthentication().withUser("user").password("password").roles("USER");
+		//auth.inMemoryAuthentication().withUser("user").password("password").roles("USER");
+	  auth.userDetailsService(userSecurityService);
 	}
 
 }

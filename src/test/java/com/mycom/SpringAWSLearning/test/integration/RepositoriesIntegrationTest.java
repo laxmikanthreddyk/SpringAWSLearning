@@ -98,6 +98,25 @@ public class RepositoriesIntegrationTest {
 	@Test
 	public void CreateUserTest() throws Exception
 	{
+		User basicUser = CreateUser();
+		
+		User newCreatedUser = userRepository.findOne(basicUser.getId());
+		Assert.assertNotNull(newCreatedUser);
+		Assert.assertTrue(newCreatedUser.getId()!=0);
+		Assert.assertNotNull(newCreatedUser.getPlan());
+		Assert.assertNotNull(newCreatedUser.getPlan().getId());
+		Set<UserRole> newUserRoles = newCreatedUser.getUserRoles();
+		for(UserRole ur:newUserRoles)
+		{
+			Assert.assertNotNull(ur.getRole());
+			Assert.assertNotNull(ur.getRole().getId());
+		}
+		
+	}
+	
+	public User CreateUser()
+	{
+		
 		Plan basicPlan = CreatePlan(PlansEnum.BASIC);
 		planRepository.save(basicPlan);
 		
@@ -113,25 +132,16 @@ public class RepositoriesIntegrationTest {
 		
 		basicUser.getUserRoles().addAll(userRoles);
 		
-		for(UserRole ur : userRoles)
-		{
-			roleRepository.save(ur.getRole());
-		}
 		
 		userRepository.save(basicUser);
-		
-		User newCreatedUser = userRepository.findOne(basicUser.getId());
-		Assert.assertNotNull(newCreatedUser);
-		Assert.assertTrue(newCreatedUser.getId()!=0);
-		Assert.assertNotNull(newCreatedUser.getPlan());
-		Assert.assertNotNull(newCreatedUser.getPlan().getId());
-		Set<UserRole> newUserRoles = newCreatedUser.getUserRoles();
-		for(UserRole ur:newUserRoles)
-		{
-			Assert.assertNotNull(ur.getRole());
-			Assert.assertNotNull(ur.getRole().getId());
-		}
-		
+		return basicUser;
+	}
+	
+	@Test
+	public void DeleteUserTest() throws Exception
+	{
+		User basicUser = CreateUser();
+		userRepository.delete(basicUser.getId());
 	}
 
 }
