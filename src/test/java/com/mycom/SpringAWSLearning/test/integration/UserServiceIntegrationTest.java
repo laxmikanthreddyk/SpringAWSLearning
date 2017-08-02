@@ -2,6 +2,7 @@ package com.mycom.SpringAWSLearning.test.integration;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -10,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 
@@ -27,27 +29,41 @@ import junit.framework.Assert;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootConfiguration
 @SpringBootTest(classes=SpringAwsLearningApplication.class)
-public class UserServiceIntegrationTest {
+public class UserServiceIntegrationTest extends AbstractServiceIntegrationTest{
 
-	@Autowired
-	private UserService userService;
 	
 	@Rule public TestName testName = new TestName();
+	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 	
 	@Test
 	public void testCreateUser() throws Exception
 	{
-		String username = testName.getMethodName();
-		String email = testName.getMethodName()+"@gmail.com";
-		Set<UserRole> userRoles = new HashSet<>();
-		User basicUser = UserUtils.CreateBasicUser(username, email); 
-		userRoles.add(new UserRole(basicUser, new Role(RolesEnum.BASIC)));
-		
-		User user = userService.CreateUser(basicUser, PlansEnum.BASIC, userRoles);
+		User user = CreateUser(testName);
 		
 		Assert.assertNotNull(user);
-		Assert.assertNotNull(user.getId());
-		
+		Assert.assertNotNull(user.getId());	
 		
 	}
+
+	@Test
+	public void testUpdateUserPassword() throws Exception
+	{
+         User user = CreateUser(testName);
+		
+		Assert.assertNotNull(user);
+		Assert.assertNotNull(user.getId());	
+		String password = UUID.randomUUID().toString();
+		
+		userService.updateUserPassword(user.getId(), password);
+		
+		User userModified = userService.getUserDetails(user.getId());
+		
+		password = passwordEncoder.encode(password);
+		
+		Assert.assertNotNull(userModified);
+		//Assert.assertEquals(password, userModified.getPassword());
+	}
+	
 }
