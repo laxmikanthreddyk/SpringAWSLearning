@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.mycom.SpringAWSLearning.backend.service.UserSecurityService;
+import com.mycom.SpringAWSLearning.controllers.ForgotMyPasswordController;
 
 @Configuration
 @EnableWebSecurity
@@ -44,7 +45,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				"/about/**",
 				"/contact/**",
 				"/error/**/*",
-				"/console/**"
+				"/console/**",
+				ForgotMyPasswordController.FORGOT_PASSWORD_URL_MAPPING
 		};
 	
 	@Override

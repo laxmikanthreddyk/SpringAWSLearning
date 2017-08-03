@@ -1,6 +1,11 @@
 package com.mycom.SpringAWSLearning.utils;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.mock.web.MockHttpServletRequest;
+
 import com.mycom.SpringAWSLearning.backend.persistence.domain.backend.User;
+import com.mycom.SpringAWSLearning.controllers.ForgotMyPasswordController;
 
 public class UserUtils {
 	
@@ -25,5 +30,17 @@ public class UserUtils {
 		user.setProfileImageUrl("http://test.com");
 		
 		return user;
+	}
+
+	public static String createPasswordResetUrl(HttpServletRequest request, long userId,
+			String token) {
+		// TODO Auto-generated method stub
+		String passwordResetUrl=request.getScheme()+"://"+
+								request.getServerName()+":"+
+								request.getServerPort()+request.getContextPath()+
+								ForgotMyPasswordController.FORGOT_PASSWORD_URL_MAPPING+
+								"?id=" + userId+
+								"&token="+token;
+		return passwordResetUrl;
 	}
 }

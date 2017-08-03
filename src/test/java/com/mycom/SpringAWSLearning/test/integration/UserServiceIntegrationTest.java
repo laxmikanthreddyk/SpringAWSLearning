@@ -60,10 +60,10 @@ public class UserServiceIntegrationTest extends AbstractServiceIntegrationTest{
 		
 		User userModified = userService.getUserDetails(user.getId());
 		
-		password = passwordEncoder.encode(password);
+		//password = passwordEncoder.encode(password);
 		
 		Assert.assertNotNull(userModified);
-		//Assert.assertEquals(password, userModified.getPassword());
+		Assert.assertTrue(passwordEncoder.matches(password, userModified.getPassword()));
 	}
 	
 }
