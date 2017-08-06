@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import com.mycom.SpringAWSLearning.backend.persistence.domain.backend.Role;
 import com.mycom.SpringAWSLearning.backend.persistence.domain.backend.User;
 import com.mycom.SpringAWSLearning.backend.persistence.domain.backend.UserRole;
+import com.mycom.SpringAWSLearning.backend.service.PlanService;
 import com.mycom.SpringAWSLearning.backend.service.SMTPSendEmailService;
 import com.mycom.SpringAWSLearning.backend.service.UserService;
 import com.mycom.SpringAWSLearning.enums.PlansEnum;
@@ -27,6 +28,9 @@ import org.springframework.boot.CommandLineRunner;
 public class SpringAwsLearningApplication implements CommandLineRunner  {
 
 	private static final Logger LOG = LoggerFactory.getLogger(SMTPSendEmailService.class);
+	
+	@Autowired
+	private PlanService planService;
 	
 	@Value("${webmaster.username}")
 	private String webmasterUsername;
@@ -48,6 +52,12 @@ public class SpringAwsLearningApplication implements CommandLineRunner  {
 
 	@Override
 	public void run(String... args) throws Exception {
+		
+		LOG.info("Creating Basic and Pro plans in the database");
+		
+		planService.CreatePlan(PlansEnum.BASIC.getId());
+		planService.CreatePlan(PlansEnum.PRO.getId());
+		
 		
 		Set<UserRole> userRoles = new HashSet<>();
 		User basicUser = UserUtils.CreateBasicUser(webmasterUsername, webmasterEmail); 

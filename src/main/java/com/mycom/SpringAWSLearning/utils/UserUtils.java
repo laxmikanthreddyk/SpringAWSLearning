@@ -6,6 +6,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 
 import com.mycom.SpringAWSLearning.backend.persistence.domain.backend.User;
 import com.mycom.SpringAWSLearning.controllers.ForgotMyPasswordController;
+import com.mycom.SpringAWSLearning.web.domain.frontend.BasicAccountPayload;
 
 public class UserUtils {
 	
@@ -38,9 +39,24 @@ public class UserUtils {
 		String passwordResetUrl=request.getScheme()+"://"+
 								request.getServerName()+":"+
 								request.getServerPort()+request.getContextPath()+
-								ForgotMyPasswordController.FORGOT_PASSWORD_URL_MAPPING+
+								ForgotMyPasswordController.CHANGE_PASSWORD_PATH+
 								"?id=" + userId+
 								"&token="+token;
 		return passwordResetUrl;
 	}
+
+	public static <T extends BasicAccountPayload> User fromWebUserToDomainUser(T frontendPayload) {
+        User user = new User();
+        user.setUsername(frontendPayload.getUsername());
+        user.setPassword(frontendPayload.getPassword());
+        user.setFirstName(frontendPayload.getFirstName());
+        user.setLastName(frontendPayload.getLastName());
+        user.setEmail(frontendPayload.getEmail());
+        user.setPhoneNumber(frontendPayload.getPhoneNumber());
+        user.setCountry(frontendPayload.getCountry());
+        user.setEnabled(true);
+        user.setDescription(frontendPayload.getDescription());
+
+        return user;
+    }
 }
